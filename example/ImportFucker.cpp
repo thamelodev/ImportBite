@@ -105,10 +105,7 @@ bool import_fucker::hook( uintptr_t hook_addr, std::string function_name, std::s
 				*reinterpret_cast< uintptr_t* >( import_address_table + j ) = hook_addr;
 
 				// Set back the address range protection to the oldest
-				if ( !VirtualProtect( import_address_table + j, 4, old_protect, &old_protect ) )
-					return false;
-
-				return true;
+				return ( VirtualProtect( import_address_table + j, 4, old_protect, &old_protect ) );
 			}
 
 			// Check if the name on Hint/Name Table is equal to the function name that I want, if it isn't continue the loop and checks if i'm using ordinal func. (just for sanity idk)
@@ -135,10 +132,7 @@ bool import_fucker::hook( uintptr_t hook_addr, std::string function_name, std::s
 				*reinterpret_cast< uintptr_t* >( import_address_table + j ) = hook_addr;
 
 				// Set back the address range protection to the oldest
-				if ( !VirtualProtect( import_address_table + j, 4, old_protect, &old_protect ) )
-					return false;
-
-				return true;
+				return ( VirtualProtect( import_address_table + j, 4, old_protect, &old_protect ) );
 			}
 			
 		}
@@ -192,12 +186,7 @@ uintptr_t import_fucker::get_hooked_func_real_address( std::string function_name
 	{
 		// Get hooked function real address using the map
 		const auto real_addr = import_fucker::hooked_funcs.find( std::to_string( ordinal_func ) )->second;
-
-		// If real address was found returns it 
-		if ( real_addr )
-			return real_addr;
-		else
-			return 0;
+		return real_addr;
 	}
 
 	// Checks if function name is empty
@@ -205,11 +194,6 @@ uintptr_t import_fucker::get_hooked_func_real_address( std::string function_name
 	{
 		// Get hooked function real address using the map
 		const auto real_addr = import_fucker::hooked_funcs.find( function_name )->second;
-
-		// If real address was found returns it 
-		if ( real_addr )
-			return real_addr;
-		else
-			return 0;
+		return real_addr;
 	}
 }
